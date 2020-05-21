@@ -18,6 +18,7 @@ public class TicTacToeCLI {
         int mode = in.nextInt();
 
         MinimaxBot bot = new MinimaxBot();
+        System.out.println();
         System.out.println(b);
         System.out.println();
 
@@ -43,15 +44,18 @@ public class TicTacToeCLI {
 
         int winner = b.getWinner();
         if (winner == 0) {
-            System.out.println("Tie :/");
+            System.out.println("Tie :/ like a bow--better luck next time bro");
         } else if (mode == BOT_MODE){
             if (winner == botPlayer) {
-                System.out.println("Boooooo... you lost to the bot >:)");
+                System.out.println("Boooooo... you lost to BOT--looks like you didn't do so " +
+                        "hot >:)");
             } else {
-                System.out.println("UH OH you have found a bug and defeated the bot :OO");
+                System.out.println("UH OH--BOT defeated hath been... how on earth did you " +
+                        "win!? :O");
             }
         } else { // A normal player one
-            System.out.println("Player " + winner + " is the winner! :))");
+            System.out.println("Player " + winner + " won :) TicTacToe was fun but now we're " +
+                    "done!");
         }
     }
 }
