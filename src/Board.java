@@ -110,26 +110,39 @@ public class Board {
     }
 
     private boolean checkDiagWinner(Move m) {
-        int currPlayer = getCurrPlayer();
-        if (m.row == m.col) {
-            // Check diagonal from top left to bottom right
-            for (int i = 0; i < DIM; i++) {
-                if(board[i][i] != currPlayer) {
-                    return false;
-                }
-            }
-            return true;
-        } else if (m.row + m.col == DIM - 1) {
-            // Check diagonal from bottom left to top right
-            for (int i = 0; i < DIM; i++) {
-                if (board[DIM - 1 - i][i] != currPlayer) {
-                    return false;
-                }
-            }
-            return true;
+        boolean backDiag = m.row == m.col;
+        boolean frontDiag = m.row + m.col == DIM - 1;
+        if (backDiag && frontDiag) {  // Move was in the center of the board
+            return checkBackDiag(m) || checkFrontDiag(m);
+        } else if (backDiag) {
+            return checkBackDiag(m);
+        } else if (frontDiag) {
+            return checkFrontDiag(m);
         } else {
             return false;
         }
+    }
+
+    // Check diagonal from top left to bottom right. this way: "\"
+    private boolean checkBackDiag(Move m) {
+        int currPlayer = getCurrPlayer();
+        for (int i = 0; i < DIM; i++) {
+            if(board[i][i] != currPlayer) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Check diagonal from bottom left to top right. this way: "/"
+    private boolean checkFrontDiag(Move m) {
+        int currPlayer = getCurrPlayer();
+        for (int i = 0; i < DIM; i++) {
+            if (board[DIM - 1 - i][i] != currPlayer) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public String toString() {
