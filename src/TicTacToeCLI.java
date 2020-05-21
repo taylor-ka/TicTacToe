@@ -7,14 +7,14 @@ public class TicTacToeCLI {
         Board b = new Board();
 
         System.out.println("Welcome to Tic Tac Toe!");
-        System.out.println(b);
-
         System.out.println("Game mode:");
         System.out.println("\t(1) Player vs. Player");
         System.out.println("\t(2) Player vs. Bot");
+        System.out.print("Choose a mode: ");
         int mode = in.nextInt();
 
         MinimaxBot bot = new MinimaxBot();
+        System.out.println(b);
 
         // TODO: who is bot? randint
         int botPlayer = 2;
