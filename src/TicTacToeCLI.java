@@ -4,11 +4,12 @@ import java.util.Scanner;
 public class TicTacToeCLI {
 
     private static final int BOT_MODE = 2;
+    private static final int DIM = 3;
 
     // TODO: no error checking and this uglyy
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        Board b = new Board();
+        Board b = new Board(DIM);
 
         System.out.println("Welcome to Tic Tac Toe!");
         System.out.println("Game mode:");

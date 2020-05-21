@@ -2,25 +2,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
-    public static final int DIM = 3;
-    private int[][] board;
-
     public static final int TIE = 0;
-    private static final int P1 = 1;
-    private static final int P2 = 2;
+
+    private int[][] board;
 
     // numMovesMade % 2 == 0 --> Player 1's turn
     // numMovesMade % 2 == 1 --> Player 2's turn
     private int numMovesMade;
+
     private boolean gameOver;
     private int winner;
+
+    private final int DIM;
 
     /**
      * Create an empty board
      */
-    public Board() {
+    public Board(int DIM) {
+        this.DIM = DIM;
         board = new int[DIM][DIM];
         numMovesMade = 0;
+    }
+
+    public int getCurrPlayer() {
+        return numMovesMade % 2 + 1;
     }
 
     public boolean gameOver() {
@@ -52,7 +57,7 @@ public class Board {
     public void makeMove(Move m) {
         if (gameOver) {
             throw new IllegalStateException("Cannot make move, game is over");
-        } else if (m.row < 0 || m.row >= DIM || m.col < 0 || m.col >= DIM) {
+        } else if (outOfBounds(m)) {
             throw new IllegalArgumentException("Illegal move: " + m.toString());
         } else if (board[m.row][m.col] != 0) {
             throw new IllegalArgumentException("Move already made: " + m.toString());
@@ -63,7 +68,7 @@ public class Board {
     }
 
     public void undoMove(Move m) {
-        if (m.row < 0 || m.row >= DIM || m.col < 0 || m.col >= DIM) {
+        if (outOfBounds(m)) {
             throw new IllegalArgumentException("Illegal move: " + m.toString());
         } else if (board[m.row][m.col] == 0) {
             throw new IllegalArgumentException("Move was never made: " + m.toString());
@@ -74,8 +79,8 @@ public class Board {
         winner = TIE; // TODO: remove. sanity check
     }
 
-    public int getCurrPlayer() {
-        return numMovesMade % 2 + 1;
+    private boolean outOfBounds(Move m) {
+        return m.row < 0 || m.row >= DIM || m.col < 0 || m.col >= DIM;
     }
 
     private void checkWinner(Move m) {
