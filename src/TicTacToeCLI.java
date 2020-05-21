@@ -9,12 +9,28 @@ public class TicTacToeCLI {
         System.out.println("Welcome to Tic Tac Toe!");
         System.out.println(b);
 
+        System.out.println("Game mode:");
+        System.out.println("\t(1) Player vs. Player");
+        System.out.println("\t(2) Player vs. Bot");
+        int mode = in.nextInt();
+
+        MinimaxBot bot = new MinimaxBot();
+
+        // TODO: who is bot? randint
+        int botPlayer = 2;
         while(!b.gameOver()) {
             int currPlayer = b.getCurrPlayer();
-            System.out.print("Player " + currPlayer + " - make a move: ");
-            String moveString = in.nextLine();
-            Board.Move m =  new Board.Move(moveString.charAt(0), moveString.charAt(1));
+            Board.Move m;
+            if (mode == 1 || currPlayer != botPlayer) {
+                System.out.print("Player " + currPlayer + " - make a move: ");
+                String moveString = in.next();
+                m = new Board.Move(moveString.charAt(0), moveString.charAt(1));
+            } else {
+                m = bot.getNextMove(b);
+                System.out.println("Player " + currPlayer + " - Bot made move: " + m);
+            }
             b.makeMove(m);
+
             System.out.println(b);
         }
 
