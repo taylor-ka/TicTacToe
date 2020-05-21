@@ -24,9 +24,10 @@ public class MinimaxBot {
         ScoredMove bestMove = new ScoredMove(Integer.MIN_VALUE, null);
         for(Board.Move move : possibleMoves) {
             b.makeMove(move);
-            ScoredMove currScored = minimaxSearch(b);
-            if (-currScored.score > bestMove.score) {
-                bestMove = new ScoredMove(-currScored.score, move);
+            ScoredMove opponentScored = minimaxSearch(b);
+            int ourCurrScore = -opponentScored.score;
+            if (ourCurrScore > bestMove.score) {
+                bestMove = new ScoredMove(ourCurrScore, move);
             }
             b.undoMove(move);
         }
