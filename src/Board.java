@@ -79,7 +79,7 @@ public class Board {
     }
 
     private void checkWinner(Move m) {
-        boolean winnerExists = checkRowWinner(m) || checkColWinner(m) || checkDiagWinner(m);
+        boolean winnerExists = isRowWinner(m) || isColWinner(m) || isDiagWinner(m);
         if (!winnerExists && numMovesMade == DIM * DIM - 1) {  // this will be the last move
             winner = TIE;
             gameOver = true;
@@ -89,7 +89,7 @@ public class Board {
         }
     }
 
-    private boolean checkRowWinner(Move m) {
+    private boolean isRowWinner(Move m) {
         int currPlayer = getCurrPlayer();
         for (int c = 0; c < DIM; c++) {
             if (board[m.row][c] != currPlayer) {
@@ -99,7 +99,7 @@ public class Board {
         return true;
     }
 
-    private boolean checkColWinner(Move m) {
+    private boolean isColWinner(Move m) {
         int currPlayer = getCurrPlayer();
         for (int r = 0; r < DIM; r++) {
             if (board[r][m.col] != currPlayer) {
@@ -109,22 +109,22 @@ public class Board {
         return true;
     }
 
-    private boolean checkDiagWinner(Move m) {
+    private boolean isDiagWinner(Move m) {
         boolean backDiag = m.row == m.col;
         boolean frontDiag = m.row + m.col == DIM - 1;
         if (backDiag && frontDiag) {  // Move was in the center of the board
-            return checkBackDiag(m) || checkFrontDiag(m);
+            return isBackDiagWin(m) || isFrontDiagWin(m);
         } else if (backDiag) {
-            return checkBackDiag(m);
+            return isBackDiagWin(m);
         } else if (frontDiag) {
-            return checkFrontDiag(m);
+            return isFrontDiagWin(m);
         } else {
             return false;
         }
     }
 
     // Check diagonal from top left to bottom right. this way: "\"
-    private boolean checkBackDiag(Move m) {
+    private boolean isBackDiagWin(Move m) {
         int currPlayer = getCurrPlayer();
         for (int i = 0; i < DIM; i++) {
             if(board[i][i] != currPlayer) {
@@ -135,7 +135,7 @@ public class Board {
     }
 
     // Check diagonal from bottom left to top right. this way: "/"
-    private boolean checkFrontDiag(Move m) {
+    private boolean isFrontDiagWin(Move m) {
         int currPlayer = getCurrPlayer();
         for (int i = 0; i < DIM; i++) {
             if (board[DIM - 1 - i][i] != currPlayer) {
