@@ -1,6 +1,10 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class TicTacToeCLI {
+
+    private static final int BOT_MODE = 2;
+
     // TODO: no error checking and this uglyy
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -15,13 +19,15 @@ public class TicTacToeCLI {
 
         MinimaxBot bot = new MinimaxBot();
         System.out.println(b);
+        System.out.println();
 
         // TODO: who is bot? randint
-        int botPlayer = 2;
+        Random r = new Random();
+        int botPlayer = r.nextInt(2) + 1 ;
         while(!b.gameOver()) {
             int currPlayer = b.getCurrPlayer();
             Board.Move m;
-            if (mode == 1 || currPlayer != botPlayer) {
+            if (mode != BOT_MODE || currPlayer != botPlayer) {
                 System.out.print("Player " + currPlayer + " - make a move: ");
                 String moveString = in.next();
                 m = new Board.Move(moveString.charAt(0), moveString.charAt(1));
@@ -32,12 +38,19 @@ public class TicTacToeCLI {
             b.makeMove(m);
 
             System.out.println(b);
+            System.out.println();
         }
 
         int winner = b.getWinner();
         if (winner == 0) {
-            System.out.println("Tie :\\\\");
-        } else {
+            System.out.println("Tie :/");
+        } else if (mode == BOT_MODE){
+            if (winner == botPlayer) {
+                System.out.println("Boooooo... you lost to the bot >:)");
+            } else {
+                System.out.println("UH OH you have found a bug and defeated the bot :OO");
+            }
+        } else { // A normal player one
             System.out.println("Player " + winner + " is the winner! :))");
         }
     }
