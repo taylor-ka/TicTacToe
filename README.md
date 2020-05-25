@@ -1,5 +1,10 @@
 # TicTacToe
-Create an unbeatable (?!?) tic-tac-toe bot using Java! We’ll learn about basic AI by  implementing the minimax algorithm (also used to create chess bots!) and build a playable GUI!
+Create an unbeatable (?!?) tic-tac-toe bot using Java! We’ll learn about basic AI by implementing the minimax algorithm (also used to create chess bots!) and build a playable GUI!
+
+## General lesson plan
+1. Get familiar with Board class (see Javadoc). Introduce minimax algorithm -- recursive backtracking! Implement TicTacToeBot interface.
+2. Review/finish minimax and talk about extensions like alpha-beta, etc. Talk about Model and View/Controller design matter. Introduction to Swing, start building GUI.
+3. Finish building GUI. After implementing basic functionality, students can build out new features of their choice! How to Google things effectively, read documentation, etc. Depending on time / interest, can wrap up by discussing multithreading, parallel alpha-beta for a chess bot and other optimizations like move ordering, transposition tables, etc.
 
 ## Starter code
 Board.java
