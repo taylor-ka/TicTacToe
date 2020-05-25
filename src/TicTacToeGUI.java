@@ -13,7 +13,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
     private JButton[][] buttons;
 
     private Board board;
-    private MinimaxBot bot;
+    private TicTacToeBot bot;
 
     private static final int DIM = 3;
     private static final String BUTTON_ROW = "row";

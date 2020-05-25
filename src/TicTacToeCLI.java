@@ -22,7 +22,8 @@ public class TicTacToeCLI {
         System.out.print("Choose a mode: ");
         int mode = in.nextInt();
 
-        MinimaxBot bot = new MinimaxBot();
+        TicTacToeBot bot = new MinimaxBot();  // TODO: replace with your bot
+
         System.out.println();
         System.out.println(b);
         System.out.println();
