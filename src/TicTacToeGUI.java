@@ -27,7 +27,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
     private boolean botMode;
 
     // When true, prints out board state after each move
-    private static final boolean DEBUG_FLAG = true;
+    private static final boolean DEBUG_FLAG = false;
 
     /**
      * Creates a new tic tac toe playing board
