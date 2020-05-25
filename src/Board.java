@@ -15,21 +15,22 @@ public class Board {
     private boolean gameOver;
     private int winner;
 
-    private final int DIM;
+    // Dimensions of the board
+    private final int dim;
 
     /**
      * Create an empty board
      */
-    public Board(int DIM) {
-        this.DIM = DIM;
-        board = new int[DIM][DIM];
+    public Board(int dim) {
+        this.dim = dim;
+        board = new int[dim][dim];
         numMovesMade = 0;
         winner = 0;
     }
 
     public void reset() {
-        for (int r = 0; r < DIM; r++) {
-            for (int c = 0; c < DIM; c++) {
+        for (int r = 0; r < dim; r++) {
+            for (int c = 0; c < dim; c++) {
                 board[r][c] = 0;
             }
         }
@@ -59,8 +60,8 @@ public class Board {
             throw new IllegalStateException("Game is over, so there are no possible moves");
         }
         List<Move> possibleMoves = new ArrayList<>();
-        for (int r = 0; r < DIM; r++) {
-            for (int c = 0; c < DIM; c++) {
+        for (int r = 0; r < dim; r++) {
+            for (int c = 0; c < dim; c++) {
                 if (board[r][c] == 0) { // spot is empty
                     possibleMoves.add(new Move(r, c));
                 }
@@ -95,12 +96,12 @@ public class Board {
     }
 
     private boolean outOfBounds(Move m) {
-        return m.row < 0 || m.row >= DIM || m.col < 0 || m.col >= DIM;
+        return m.row < 0 || m.row >= dim || m.col < 0 || m.col >= dim;
     }
 
     private void checkWinner(Move m) {
         boolean winnerExists = isRowWinner(m) || isColWinner(m) || isDiagWinner(m);
-        if (!winnerExists && numMovesMade == DIM * DIM - 1) {  // this will be the last move
+        if (!winnerExists && numMovesMade == dim * dim - 1) {  // this will be the last move
             winner = TIE;
             gameOver = true;
         } else if (winnerExists) {
@@ -111,7 +112,7 @@ public class Board {
 
     private boolean isRowWinner(Move m) {
         int currPlayer = getCurrPlayer();
-        for (int c = 0; c < DIM; c++) {
+        for (int c = 0; c < dim; c++) {
             if (board[m.row][c] != currPlayer) {
                 return false;
             }
@@ -121,7 +122,7 @@ public class Board {
 
     private boolean isColWinner(Move m) {
         int currPlayer = getCurrPlayer();
-        for (int r = 0; r < DIM; r++) {
+        for (int r = 0; r < dim; r++) {
             if (board[r][m.col] != currPlayer) {
                 return false;
             }
@@ -131,7 +132,7 @@ public class Board {
 
     private boolean isDiagWinner(Move m) {
         boolean backDiag = m.row == m.col;
-        boolean frontDiag = m.row + m.col == DIM - 1;
+        boolean frontDiag = m.row + m.col == dim - 1;
         if (backDiag && frontDiag) {  // Move was in the center of the board
             return isBackDiagWin(m) || isFrontDiagWin(m);
         } else if (backDiag) {
@@ -146,7 +147,7 @@ public class Board {
     // Check diagonal from top left to bottom right. this way: "\"
     private boolean isBackDiagWin(Move m) {
         int currPlayer = getCurrPlayer();
-        for (int i = 0; i < DIM; i++) {
+        for (int i = 0; i < dim; i++) {
             if(board[i][i] != currPlayer) {
                 return false;
             }
@@ -157,8 +158,8 @@ public class Board {
     // Check diagonal from bottom left to top right. this way: "/"
     private boolean isFrontDiagWin(Move m) {
         int currPlayer = getCurrPlayer();
-        for (int i = 0; i < DIM; i++) {
-            if (board[DIM - 1 - i][i] != currPlayer) {
+        for (int i = 0; i < dim; i++) {
+            if (board[dim - 1 - i][i] != currPlayer) {
                 return false;
             }
         }
@@ -167,12 +168,12 @@ public class Board {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int r = 0; r < DIM; r++) {
-            for (int c = 0; c < DIM; c++) {
+        for (int r = 0; r < dim; r++) {
+            for (int c = 0; c < dim; c++) {
                 sb.append(board[r][c] + " ");
             }
 
-            if (r != DIM - 1) {
+            if (r != dim - 1) {
                 sb.append("\n");
             }
         }
