@@ -69,8 +69,6 @@ public class Board {
         return possibleMoves;
     }
 
-    // TODO: make move for just row / col
-
     public void makeMove(Move m) {
         if (gameOver) {
             throw new IllegalStateException("Cannot make move, game is over");
