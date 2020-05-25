@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 
 import static javax.swing.JOptionPane.YES_OPTION;
 
+// Convention: player 1 is X, player 2 is O
+// When playing in bot mode, human player is X, bot player is O
 public class TicTacToeGUI extends JFrame implements ActionListener {
     private Container pane;
     private JButton[][] buttons;
@@ -18,6 +20,11 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
     private static final int DIM = 3;
     private static final String BUTTON_ROW = "row";
     private static final String BUTTON_COL = "col";
+    private static final int PLAYER_X = 1;
+    private static final int PLAYER_O = 2;
+
+    private boolean botMode;
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -28,55 +35,45 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
     }
 
     public TicTacToeGUI() {
-        super(); // call JFrame default constructor
+        // call JFrame default constructor
+        super();
 
         // Create content pane
+        initializePane();
+
+        // Set up board buttons
+        initializeButtons();
+        initializeIcons(); // TODO: remove
+
+        // Create board and bot
+        board = new Board(DIM);
+        bot = new MinimaxBot();
+
+        // Start game
+        setVisible(true);
+        chooseGameMode();
+    }
+
+    private void initializePane() {
         pane = getContentPane();
         pane.setLayout(new GridLayout(DIM,DIM));
         setTitle("Tic Tac Toe");
         setSize(500, 500);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        // Set up board buttons
-        initializeButtons();
-        initializeIcons(); // TODO: remove
-
-        // Create board
-        board = new Board(DIM);
-        bot = new MinimaxBot();
-
-        setVisible(true);
     }
-
-    private void resetGame() {
-        for (int r = 0; r < DIM; r++) {
-            for (int c = 0; c < DIM; c++) {
-                JButton currButton = buttons[r][c];
-
-                // Reset action listener for button
-                currButton.removeActionListener(this);
-                currButton.addActionListener(this);
-                currButton.setText("");
-            }
-        }
-        board.reset();
-    }
-
 
     private void initializeButtons() {
         buttons = new JButton[DIM][DIM];
         Font font = new Font("Arial", Font.PLAIN, 150);
         for (int r = 0; r < DIM; r++) {
             for (int c = 0; c < DIM; c++) {
+                // Create button
                 buttons[r][c] = new JButton();
                 JButton currButton = buttons[r][c];     // for easier reference
                 currButton.addActionListener(this);
                 currButton.setText("");
                 currButton.setFont(font);
-
-                // To prevent double clicks, 1000 millisecond threshold
-                currButton.setMultiClickThreshhold(1000);
 
                 // Save row and column for future use
                 currButton.putClientProperty(BUTTON_ROW, r);
@@ -110,28 +107,63 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         return new ImageIcon(original);
     }
 
+    private void chooseGameMode() {
+        Object[] options = {"Player vs. Player", "Player vs. Bot"};
+        int response = JOptionPane.showOptionDialog(this,
+                "Choose your game mode:",
+                "It's Tic Tac Toe time!",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,     //do not use a custom Icon
+                options,  //the titles of buttons
+                options[0]); //default button selected
+        botMode = response != 0;
+    }
+
+    private void resetGame() {
+        for (int r = 0; r < DIM; r++) {
+            for (int c = 0; c < DIM; c++) {
+                JButton currButton = buttons[r][c];
+
+                // Reset action listener for button
+                currButton.removeActionListener(this);
+                currButton.addActionListener(this);
+                currButton.setText("");
+            }
+        }
+        board.reset();
+        chooseGameMode();
+    }
+
     public void actionPerformed(ActionEvent e) {
         // Update board to reflect user's move
         JButton buttonClicked = (JButton)e.getSource();
-        //buttonClicked.setEnabled(false);
-        moveMade(buttonClicked);
-        
-        // TODO: don't do this if resetting game
-        Board.Move botMove = bot.getNextMove(board);
-        moveMade(buttons[botMove.row][botMove.col]);
+        boolean gameOver = updateMoveMade(buttonClicked);
+
+        // If the player didn't win, and we're in bot mode, then ask bot for next move
+        if (!gameOver && botMode) {
+            Board.Move botMove = bot.getNextMove(board);
+            updateMoveMade(buttons[botMove.row][botMove.col]);
+        }
     }
 
-    private void moveMade(JButton button) {
+    /**
+     * Updates game state to reflect that a move was made. Updates GUI to show move, updates
+     * board model to reflect move as well.
+     * @param button to update with made move
+     * @return true if the game is now over, false if the game continues
+     */
+    private boolean updateMoveMade(JButton button) {
         // Disable button so that re-clicking it does nothing
         button.removeActionListener(this);
 
-        if (board.getCurrPlayer() == 1) {
-            button.setText("O");
-            button.setForeground(Color.BLUE);
-            // buttonClicked.setIcon(oIcon);
-        } else {
+        if (board.getCurrPlayer() == PLAYER_X) {
             button.setText("X");
             button.setForeground(Color.RED);
+            // buttonClicked.setIcon(oIcon);
+        } else {
+            button.setText("O");
+            button.setForeground(Color.BLUE);
             // buttonClicked.setIcon(xIcon);
         }
         int row = (int)button.getClientProperty(BUTTON_ROW);
@@ -141,20 +173,40 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         // TODO: remove. For debugging
         System.out.println(board);
         System.out.println();
-        if (board.gameOver()) {
-            gameOver();
+
+        boolean gameOver = board.gameOver();
+        if (gameOver) {
+            showGameOver();
         }
+        return gameOver;
     }
 
-    private void gameOver() {
+    private void showGameOver() {
+        // Determine who won the game and pick message to show
+        int winner = board.getWinner();
+        String winnerMessage;
+
+        if (winner == Board.TIE) {
+            winnerMessage = "The game was a tie!";
+        } else if (botMode){
+            if (winner == Board.P1) { // TODO: is bot always second?
+                winnerMessage = "Uh oh... You beat the bot?!?! Time to go hunt for bugs!";
+            } else {
+                winnerMessage = "You lost to the bot! Mwahahhaa >:)";
+            }
+        } else { // A normal player one
+            String playerWinner = winner == PLAYER_X ? "X" : "O";
+            winnerMessage = "Player " + playerWinner + " is the winner!";
+        }
+
         // Show game over dialog box
         Object[] options = {"Play Again", "Exit"};
         int response = JOptionPane.showOptionDialog(this,
-                    "Game Over!",
+                    winnerMessage,
                     "Game Over!",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
-                    null,     //do not use a custom Icon
+                    null,     // TODO: custom icon
                     options,  //the titles of buttons
                     options[0]); //default button selected
 
@@ -166,6 +218,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
             System.out.println(board);
             System.out.println();
         } else {
+            // Exit the game
             this.dispose();
         }
     }

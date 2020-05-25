@@ -3,6 +3,8 @@ import java.util.List;
 
 public class Board {
     public static final int TIE = 0;
+    public static final int P1 = 1;
+    public static final int P2 = 2;
 
     private int[][] board;
 
