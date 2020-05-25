@@ -2,8 +2,8 @@
 Create an unbeatable (?!?) tic-tac-toe bot using Java! We’ll learn about basic AI by implementing the minimax algorithm (also used to create chess bots!) and build a playable GUI!
 
 ## Goals
-- Give students a taste of AI! Demonstrate that 143 has really given them all the fundamental programming concept they need.
-- Build something fun to show to friends and family. Even though Swing is ugly, this means that students don't need to install any thing new, which should make set up for this project much easier!
+- Give students a taste of AI! Demonstrate that 143 has really given them all the fundamental programming concept they need to build something pretty cool!
+- Build something fun to show to friends and family! Even though Swing is ugly, this means that students don't need to install any thing new, which should make set up for this project much easier :))
 
 ## General lesson plan
 1. Get familiar with Board class and reading Javadoc. Reminder of canWin method from lecture, introduce minimax algorithm -- recursive backtracking! Show that 143 concepts apply to cool algorithms! Implement TicTacToeBot interface.
