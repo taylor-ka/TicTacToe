@@ -2,11 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import static javax.swing.JOptionPane.YES_OPTION;
 
-// Convention: player 1 is X, player 2 is O
-// When playing in bot mode, human player is X, bot player is O
+/**
+ * A simple TicTacToe GUI that allows the user to play in either Player vs. Player or Player vs.
+ * Bot mode.
+ */
 public class TicTacToeGUI extends JFrame implements ActionListener {
     private Container pane;
     private JButton[][] buttons;
@@ -14,46 +15,45 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
     private Board board;
     private MinimaxBot bot;
 
-    private ImageIcon xIcon;
-    private ImageIcon oIcon;
-
     private static final int DIM = 3;
     private static final String BUTTON_ROW = "row";
     private static final String BUTTON_COL = "col";
+
+    // Convention: player 1 is X, player 2 is O
     private static final int PLAYER_X = 1;
     private static final int PLAYER_O = 2;
 
+    // When playing in bot mode, human player is X, bot player is O
     private boolean botMode;
 
+    // When true, prints out board state after each move
+    private static final boolean DEBUG_FLAG = true;
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new TicTacToeGUI();
-            }
-        });
-    }
-
+    /**
+     * Creates a new tic tac toe playing board
+     */
     public TicTacToeGUI() {
         // call JFrame default constructor
         super();
 
-        // Create content pane
+        // Create content pane and board buttons
         initializePane();
-
-        // Set up board buttons
         initializeButtons();
-        initializeIcons(); // TODO: remove
 
-        // Create board and bot
+        // Create board model and bot
         board = new Board(DIM);
         bot = new MinimaxBot();
 
         // Start game
         setVisible(true);
         chooseGameMode();
+
+        debugPrint();
     }
 
+    /**
+     * Initializes ContentPane of GUI
+     */
     private void initializePane() {
         pane = getContentPane();
         pane.setLayout(new GridLayout(DIM,DIM));
@@ -63,6 +63,9 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    /**
+     * Creates buttons for board and stores row and column to be used in the future
+     */
     private void initializeButtons() {
         buttons = new JButton[DIM][DIM];
         Font font = new Font("Arial", Font.PLAIN, 150);
@@ -83,30 +86,10 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         }
     }
 
-    private void initializeIcons() {
-        xIcon = createImageIcon("img/x.png");
-        oIcon = createImageIcon("img/o.png");
-    }
-
-    // Returns an ImageIcon, or null if the path was invalid.
-    private ImageIcon createImageIcon(String path) {
-        // Get image path
-        java.net.URL imgURL = TicTacToeGUI.class.getResource(path);
-        if (imgURL == null) {
-            System.err.println("Couldn't find file: " + path);
-            return null;
-        }
-
-        // Grab the height and width of a button (all buttons are the same dimension)
-        int width = buttons[0][0].getMaximumSize().width;
-        int height = buttons[0][0].getMaximumSize().height;
-
-        // Scale image to fit button
-        Image original = new ImageIcon(imgURL).getImage();
-        //Image scaled = original.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return new ImageIcon(original);
-    }
-
+    /**
+     * Displays dialog to have player choose a game mode. If the player exits the dialog box,
+     * defaults to Player vs. Bot mode
+     */
     private void chooseGameMode() {
         Object[] options = {"Player vs. Player", "Player vs. Bot"};
         int response = JOptionPane.showOptionDialog(this,
@@ -120,6 +103,10 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         botMode = response != 0;
     }
 
+    /**
+     * Resets the state of the game. Resets buttons so they are all blank and active, resets
+     * board model, and asks player to choose a game mode again
+     */
     private void resetGame() {
         for (int r = 0; r < DIM; r++) {
             for (int c = 0; c < DIM; c++) {
@@ -135,6 +122,11 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         chooseGameMode();
     }
 
+    /**
+     * Implements ActionListener interface to update the board to reflect a move when a button is
+     * pressed
+     * @param e button click event
+     */
     public void actionPerformed(ActionEvent e) {
         // Update board to reflect user's move
         JButton buttonClicked = (JButton)e.getSource();
@@ -160,19 +152,15 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         if (board.getCurrPlayer() == PLAYER_X) {
             button.setText("X");
             button.setForeground(Color.RED);
-            // buttonClicked.setIcon(oIcon);
         } else {
             button.setText("O");
             button.setForeground(Color.BLUE);
-            // buttonClicked.setIcon(xIcon);
         }
         int row = (int)button.getClientProperty(BUTTON_ROW);
         int col = (int)button.getClientProperty(BUTTON_COL);
         board.makeMove(new Board.Move(row, col));
 
-        // TODO: remove. For debugging
-        System.out.println(board);
-        System.out.println();
+        debugPrint(); // TODO: remove. For debugging
 
         boolean gameOver = board.gameOver();
         if (gameOver) {
@@ -181,7 +169,40 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         return gameOver;
     }
 
+    /**
+     * Shows game over dialog, and asks player if they want to play again. If the player exits
+     * the dialog, the game closes.
+     */
     private void showGameOver() {
+        // Determine who won the game and pick message to show
+        String winnerMessage = getGameOverMessage();
+
+        // Show game over dialog box
+        Object[] options = {"Play Again", "Exit"};
+        int response = JOptionPane.showOptionDialog(this,
+                    winnerMessage,
+                    "Game Over!",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,     // TODO: custom icon
+                    options,  //the titles of buttons
+                    options[0]); //default button selected
+
+        // Process user's choice
+        if (response == YES_OPTION) {
+            resetGame();
+            debugPrint();  // TODO: remove. For debugging
+        } else {
+            // Exit the game
+            this.dispose();
+        }
+    }
+
+    /**
+     * Returns the appropriate game over message to be displayed to the user
+     * @return game over message, indicating how the game ended
+     */
+    private String getGameOverMessage() {
         // Determine who won the game and pick message to show
         int winner = board.getWinner();
         String winnerMessage;
@@ -198,28 +219,16 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
             String playerWinner = winner == PLAYER_X ? "X" : "O";
             winnerMessage = "Player " + playerWinner + " is the winner!";
         }
+        return winnerMessage;
+    }
 
-        // Show game over dialog box
-        Object[] options = {"Play Again", "Exit"};
-        int response = JOptionPane.showOptionDialog(this,
-                    winnerMessage,
-                    "Game Over!",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,     // TODO: custom icon
-                    options,  //the titles of buttons
-                    options[0]); //default button selected
-
-        // Process user's choice
-        if (response == YES_OPTION) {
-            resetGame();
-
-            // TODO: remove. For debugging
+    /**
+     * When DEBUG_FLAG on, prints out the state of the board after every move.
+     */
+    private void debugPrint() {
+        if (DEBUG_FLAG) {
             System.out.println(board);
             System.out.println();
-        } else {
-            // Exit the game
-            this.dispose();
         }
     }
 
