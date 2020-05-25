@@ -22,6 +22,19 @@ public class Board {
         this.DIM = DIM;
         board = new int[DIM][DIM];
         numMovesMade = 0;
+        winner = 0;
+    }
+
+    public void reset() {
+        for (int r = 0; r < DIM; r++) {
+            for (int c = 0; c < DIM; c++) {
+                board[r][c] = 0;
+            }
+        }
+
+        numMovesMade = 0;
+        gameOver = false;
+        winner = 0;
     }
 
     public int getCurrPlayer() {
@@ -53,6 +66,8 @@ public class Board {
         }
         return possibleMoves;
     }
+
+    // TODO: make move for just row / col
 
     public void makeMove(Move m) {
         if (gameOver) {
