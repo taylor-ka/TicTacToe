@@ -4,8 +4,8 @@
 public interface TicTacToeBot {
 
     /**
-     * Return the next move the bot wants to make
-     * @param b The current board state
+     * Return the next move the bot wants to make.
+     * @param b The current board state. The game should not be over.
      * @return next move to make
      */
     public Board.Move getNextMove(Board b);
