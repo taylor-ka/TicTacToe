@@ -9,8 +9,8 @@ public class TicTacToeCLI {
     private static final int BOT_MODE = 2;
     private static final int DIM = 3;
 
-    // TODO: no error checking and this uglyy
-    // This is terrible code. Please write helper methods and do error checking :))
+    // TODO: This is terrible code. Please write helper methods and do error checking :)), don't
+    //  copy this or use this as an example of good style!
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         Board b = new Board(DIM);
@@ -37,7 +37,10 @@ public class TicTacToeCLI {
             if (mode != BOT_MODE || currPlayer != botPlayer) {
                 System.out.print("Player " + currPlayer + " - make a move: ");
                 String moveString = in.next();
-                m = new Board.Move(moveString.charAt(0), moveString.charAt(1));
+
+                // Parses user input, converting to int values to pass to move constructor
+                // TODO: This is terrible code!! There is no input checking :((
+                m = new Board.Move(moveString.charAt(0) - 'a', moveString.charAt(1) - '0');
             } else {
                 m = bot.getNextMove(b);
                 System.out.println("Player " + currPlayer + " - Bot made move: " + m);

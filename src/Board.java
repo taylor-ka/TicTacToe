@@ -237,21 +237,14 @@ public class Board {
          * Constructs a new move at the given row and column
          * @param row row number, indexing starts at 0
          * @param col column number. indexing starts at 0
+         * @throws IllegalArgumentException if row or col is negative
          */
         public Move(int row, int col) {
+            if (row < 0 || col < 0) {
+                throw new IllegalArgumentException("row/col numbers cannot be negative");
+            }
             this.row = row;
             this.col = col;
-        }
-
-        /**
-         * Constructs a new move from the character representation a move
-         * @param rowChar 'a', 'b', ...
-         * @param colChar '0', '1', ...
-         */
-        public Move(char rowChar, char colChar) {
-            // TODO: do I need this
-            this.row = rowChar - 'a';
-            this.col = colChar - '0';
         }
 
         /**
