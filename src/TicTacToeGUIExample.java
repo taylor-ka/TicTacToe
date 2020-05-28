@@ -8,7 +8,7 @@ import static javax.swing.JOptionPane.YES_OPTION;
  * A simple TicTacToe GUI that allows the user to play in either Player vs. Player or Player vs.
  * Bot mode.
  */
-public class TicTacToeGUI extends JFrame implements ActionListener {
+public class TicTacToeGUIExample extends JFrame implements ActionListener {
     private Container pane;
     private JButton[][] buttons;
 
@@ -27,12 +27,12 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
     private boolean botMode;
 
     // When true, prints out board state after each move
-    private static final boolean DEBUG_FLAG = false;
+    private static final boolean DEBUG_FLAG = true;
 
     /**
      * Creates a new tic tac toe playing board
      */
-    public TicTacToeGUI() {
+    public TicTacToeGUIExample() {
         // call JFrame default constructor
         super();
 
