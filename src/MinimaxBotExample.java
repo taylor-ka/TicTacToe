@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class MinimaxBot implements TicTacToeBot {
+public class MinimaxBotExample implements TicTacToeBot {
 
     private static final ScoredMove TIED = new ScoredMove(0, null);
     private static final ScoredMove LOST = new ScoredMove(-1, null);

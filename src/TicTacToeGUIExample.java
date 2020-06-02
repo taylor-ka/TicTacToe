@@ -42,7 +42,7 @@ public class TicTacToeGUIExample extends JFrame implements ActionListener {
 
         // Create board model and bot
         board = new Board(DIM);
-        bot = new MinimaxBot();
+        bot = new MinimaxBotExample();  // TODO: replace with your bot
 
         // Start game
         setVisible(true);

@@ -21,7 +21,7 @@ TicTacToeCLI.java
 - Bare bones CLI that uses Board and implementation of TicTacToeBot. This is mostly useful for testing purposes and isn't particularly enjoyable to play. There's also no error checking whatsoever so don't mess up or the game will crash :))
 
 ## Solution code
-MinimaxBot.java
+MinimaxBotExample.java
 - Solution code for Minimax algorithm to solve TicTacToe. Implements the TicTacToeBot interface and uses the Board class.
 
 TicTacToeGUI.java
