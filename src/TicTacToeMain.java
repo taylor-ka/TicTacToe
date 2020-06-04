@@ -1,3 +1,5 @@
+// Taylor Ka - June 2020
+
 import javax.swing.*;
 
 public class TicTacToeMain {

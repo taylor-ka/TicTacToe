@@ -1,3 +1,5 @@
+// Taylor Ka - June 2020
+
 import java.util.List;
 
 public class MinimaxBotExample implements TicTacToeBot {
