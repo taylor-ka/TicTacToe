@@ -29,7 +29,8 @@ public class MinimaxBotExample implements TicTacToeBot {
             ScoredMove opponentScored = minimaxSearch(b);
             int ourCurrScore = -opponentScored.score;
             if (ourCurrScore > bestMove.score) {
-                bestMove = new ScoredMove(ourCurrScore, move);
+                bestMove.score = ourCurrScore;
+                bestMove.move = move;
             }
             b.undoMove(move);
         }
@@ -37,8 +38,8 @@ public class MinimaxBotExample implements TicTacToeBot {
     }
 
     private static class ScoredMove {
-        public final int score;
-        public final Board.Move move;
+        public int score;
+        public Board.Move move;
 
         public ScoredMove(int score, Board.Move move) {
             this.score = score;
