@@ -1,5 +1,7 @@
 # TicTacToe
-This project was created to be finished in the final 3 sections of CSE 143 in Spring 2020.
+I'm a head TA for CSE 143 at University of Washington Seattle. We had no exams this quarter due to online classes, which gave us extra time in section when we would normally have been doing final review. I created this guided project for my section and fellow TAs to complete in the last three classes of the quarter. I hope this can be a jumping-off point for students to explore CS on their own after they've finished the course!
+
+## About
 
 Create an unbeatable (?!?) tic-tac-toe bot using Java! We’ll learn about basic AI by implementing the minimax algorithm (also used to create chess bots!) and build a playable GUI!
 
@@ -15,8 +17,7 @@ Students can definitely write all the code for this project, but for the sake of
 2.  Reminder of canWin method from lecture, introduce minimax algorithm -- recursive backtracking! Show that 143 concepts apply to cool algorithms! Start implementing TicTacToeBot interface.
 3. Finish implementing TicTacToe bot. With extra time (if this exists), can talk about building out new features for the GUI and how to Google things effectively, read documentation, etc. Depending on time / interest, can wrap up by discussing multithreading, parallel alpha-beta for a chess bot and other optimizations like move ordering, transposition tables, etc.
 
-*See [slide deck](https://docs.google.com/presentation/d/18C2Egrt0i2aTPiqADXtMK_M_LcdVirvquN7D1z2vWUk/edit?usp=sharing) for more detailed lesson plans.*
-
+*See this [slide deck](https://docs.google.com/presentation/d/18C2Egrt0i2aTPiqADXtMK_M_LcdVirvquN7D1z2vWUk/edit?usp=sharing) for more detailed lesson plans.*
 
 ## Starter code
 Board.java
