@@ -34,6 +34,14 @@ TicTacToeCLI.java
 - The documentation folder contains generated Javadocs for the Board class and the TicTacToeBot interface
 - Can be a cool way to show students why the comments they’ve been writing (and probably hating) are useful and important!
 
+## Additional Resources
+swing-cheat-sheet.md
+- Lists out helpful components and methods for writing the GUI.
+
+pseudocode.md
+- Pseudocode for implementing the bot
+- Includes both true minimax version and negamax optimization
+
 ## Solution code
 MinimaxBotExample.java
 - Solution code for Minimax algorithm to solve TicTacToe.
